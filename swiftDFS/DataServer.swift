@@ -47,6 +47,10 @@ class DataServer {
                 put(putCmd)
             } else if let readCmd = cmd as? ReadCommmand {
                 read(readCmd)
+            } else if let fetchCmd = cmd as? FetchCommand {
+                fetch(fetchCmd)
+            } else if let locateCmd = cmd as? LocateCommand {
+                locate(locateCmd)
             }
         }
     }
@@ -57,5 +61,13 @@ class DataServer {
     
     func read(_ command: ReadCommmand) {
         print("read cmd")
+    }
+    
+    func fetch(_ command: FetchCommand) {
+        print("fetch cmd")
+    }
+    
+    func locate(_ command: LocateCommand) {
+        print("locate cmd")
     }
 }

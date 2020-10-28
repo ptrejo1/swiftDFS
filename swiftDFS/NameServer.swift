@@ -51,6 +51,10 @@ class NameServer {
                 put(commandArgs)
             case "read":
                 read(commandArgs)
+            case "fetch":
+                fetch(commandArgs)
+            case "locate":
+                locate(commandArgs)
             default:
                 printErr("invalid command")
             }
@@ -114,6 +118,32 @@ class NameServer {
         
         dataServers.forEach {
             let cmd = ReadCommmand(fid: fileInfo.fid, size: fileInfo.size)
+            $0.setCommand(cmd)
+            $0.broadcast()
+        }
+    }
+    
+    func fetch(_ args: [String]) {
+        guard args.count == 4 else {
+            printErr("usage: fetch FileID Offset dest_file_path")
+            return
+        }
+        
+        dataServers.forEach {
+            let cmd = FetchCommand(fid: Int(args[1])!, offset: Int(args[2])!)
+            $0.setCommand(cmd)
+            $0.broadcast()
+        }
+    }
+    
+    func locate(_ args: [String]) {
+        guard args.count == 3 else {
+            printErr("usage: locate fileID Offset")
+            return
+        }
+        
+        dataServers.forEach {
+            let cmd = LocateCommand(fid: Int(args[1])!, offset: Int(args[2])!)
             $0.setCommand(cmd)
             $0.broadcast()
         }
