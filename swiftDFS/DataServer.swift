@@ -45,11 +45,17 @@ class DataServer {
             
             if let putCmd = cmd as? PutCommand {
                 put(putCmd)
+            } else if let readCmd = cmd as? ReadCommmand {
+                read(readCmd)
             }
         }
     }
     
     func put(_ command: PutCommand) {
         print("put cmd")
+    }
+    
+    func read(_ command: ReadCommmand) {
+        print("read cmd")
     }
 }

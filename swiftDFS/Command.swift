@@ -13,3 +13,8 @@ struct PutCommand: Command {
     let fid: Int
     let fileData: Data
 }
+
+struct ReadCommmand: Command {
+    let fid: Int
+    let size: Int
+}

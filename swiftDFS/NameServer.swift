@@ -49,6 +49,8 @@ class NameServer {
                 list(commandArgs)
             case "put":
                 put(commandArgs)
+            case "read":
+                read(commandArgs)
             default:
                 printErr("invalid command")
             }
@@ -74,7 +76,7 @@ class NameServer {
     
     func put(_ args: [String]) {
         guard args.count == 3 else {
-            printErr("usage: put source_file_path des_file_path")
+            printErr("usage: put source_file_path dfs_dest_file_path")
             return
         }
         
@@ -97,6 +99,23 @@ class NameServer {
             let cmd = PutCommand(fid: insertId, fileData: fileData)
             sortedServers[i].setCommand(cmd)
             sortedServers[i].broadcast()
+        }
+    }
+    
+    func read(_ args: [String]) {
+        guard args.count == 3 else {
+            printErr("usage: read dfs_source_file_path dest_file_path")
+            return
+        }
+        guard let fileInfo = meta[args[1]] else {
+            printErr("error: no such file in miniDFS")
+            return
+        }
+        
+        dataServers.forEach {
+            let cmd = ReadCommmand(fid: fileInfo.fid, size: fileInfo.size)
+            $0.setCommand(cmd)
+            $0.broadcast()
         }
     }
 }
