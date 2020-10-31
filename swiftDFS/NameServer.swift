@@ -57,6 +57,7 @@ class NameServer {
                 locate(commandArgs)
             default:
                 printErr("invalid command")
+                continue
             }
             
             dataServers.forEach {
@@ -64,6 +65,15 @@ class NameServer {
                     $0.wait()
                     $0.broadcast()
                 }
+            }
+            
+            switch argument {
+            case "put":
+                print("Upload success. The file id is \(insertId)")
+            case "read":
+                processRead(commandArgs)
+            default:
+                break
             }
         }
     }
@@ -85,7 +95,10 @@ class NameServer {
         }
         
         let sourceFile = args[1], destFile = args[2]
-        guard let fh = FileHandle(forReadingAtPath: sourceFile) else {
+        guard
+            let fileUrl = URL(string: sourceFile),
+            let fh = try? FileHandle(forReadingFrom: fileUrl)
+        else {
             printErr("open file error: \(args[1])")
             return
         }
@@ -146,6 +159,24 @@ class NameServer {
             let cmd = LocateCommand(fid: Int(args[1])!, offset: Int(args[2])!)
             $0.setCommand(cmd)
             $0.broadcast()
+        }
+    }
+    
+    func processRead(_ args: [String]) {
+        for server in dataServers {
+            defer { server.readData = nil }
+            guard let fileData = server.readData else {
+                continue
+            }
+            
+            let destFile = args[2]
+            FileManager.default.createFile(atPath: destFile, contents: nil, attributes: nil)
+            guard let fh = FileHandle(forWritingAtPath: destFile) else {
+                printErr("unable to create destination file")
+                continue
+            }
+            
+            fh.write(fileData)
         }
     }
 }

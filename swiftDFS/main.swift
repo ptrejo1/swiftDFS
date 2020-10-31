@@ -12,7 +12,7 @@ let initialDataServersCount = 4
 
 func main() {
     let nameServer = NameServer(replicationFactor: replicationFactor)
-    let dataServers = (0..<initialDataServersCount).map { _ in DataServer() }
+    let dataServers = (0..<initialDataServersCount).map { DataServer(String($0)) }
     
     dataServers.forEach { nameServer.addServer(server: $0) }
     dataServers.forEach { server in
