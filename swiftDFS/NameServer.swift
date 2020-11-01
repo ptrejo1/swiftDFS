@@ -10,6 +10,10 @@ import Foundation
 struct FileInfo {
     let fid: Int
     let size: Int
+    
+    var chunkNumber: Int {
+        return size / chunkSize
+    }
 }
 
 class NameServer {
@@ -68,8 +72,6 @@ class NameServer {
             }
             
             switch argument {
-            case "put":
-                print("Upload success. The file id is \(insertId)")
             case "read":
                 processRead(commandArgs)
             default:
@@ -85,7 +87,7 @@ class NameServer {
         }
         
         print("File\tFileId\tChunkNumber")
-        fileTree.list()
+        fileTree.list(fileTable: meta)
     }
     
     func put(_ args: [String]) {

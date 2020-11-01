@@ -7,6 +7,8 @@
 
 import Foundation
 
+let chunkSize = 2 * 1024 * 1024
+
 struct StandardErrorOutputStream: TextOutputStream {
     
     func write(_ string: String) {

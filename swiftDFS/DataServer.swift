@@ -17,7 +17,6 @@ class DataServer {
     
     private let serverLock = NSLock()
     private let conditionLock = NSCondition()
-    private let chunkSize = 2 * 1024 * 1024
     
     private var command: Command?
     
