@@ -31,3 +31,11 @@ func printErr(_ items: Any...) {
     var outputStream = StandardErrorOutputStream()
     print(items, to: &outputStream)
 }
+
+extension FileHandle {
+    
+    func unsafeClose() {
+        do { try self.close() }
+        catch { printErr(error) }
+    }
+}

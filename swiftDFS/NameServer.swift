@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CryptoKit
 
 struct FileInfo {
     let fid: Int
@@ -55,10 +56,6 @@ class NameServer {
                 put(commandArgs)
             case "read":
                 read(commandArgs)
-            case "fetch":
-                fetch(commandArgs)
-            case "locate":
-                locate(commandArgs)
             default:
                 printErr("invalid command")
                 continue
@@ -119,6 +116,8 @@ class NameServer {
             sortedServers[i].setCommand(cmd)
             sortedServers[i].broadcast()
         }
+        
+        fh.unsafeClose()
     }
     
     func read(_ args: [String]) {
@@ -138,33 +137,9 @@ class NameServer {
         }
     }
     
-    func fetch(_ args: [String]) {
-        guard args.count == 4 else {
-            printErr("usage: fetch FileID Offset dest_file_path")
-            return
-        }
-        
-        dataServers.forEach {
-            let cmd = FetchCommand(fid: Int(args[1])!, offset: Int(args[2])!)
-            $0.setCommand(cmd)
-            $0.broadcast()
-        }
-    }
-    
-    func locate(_ args: [String]) {
-        guard args.count == 3 else {
-            printErr("usage: locate fileID Offset")
-            return
-        }
-        
-        dataServers.forEach {
-            let cmd = LocateCommand(fid: Int(args[1])!, offset: Int(args[2])!)
-            $0.setCommand(cmd)
-            $0.broadcast()
-        }
-    }
-    
     func processRead(_ args: [String]) {
+        var preChecksum: Insecure.MD5.Digest? = nil
+        
         for server in dataServers {
             defer { server.readData = nil }
             guard let fileData = server.readData else {
@@ -179,6 +154,14 @@ class NameServer {
             }
             
             fh.write(fileData)
+            let checksum = Insecure.MD5.hash(data: fileData)
+            if let pre = preChecksum, pre != checksum {
+                printErr("error: unequal checksum for files from different dataServers")
+            }
+            preChecksum = checksum
+            
+            server.readData = nil
+            fh.unsafeClose()
         }
     }
 }

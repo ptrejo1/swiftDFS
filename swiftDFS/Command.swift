@@ -18,13 +18,3 @@ struct ReadCommmand: Command {
     let fid: Int
     let size: Int
 }
-
-struct FetchCommand: Command {
-    let fid: Int
-    let offset: Int
-}
-
-struct LocateCommand: Command {
-    let fid: Int
-    let offset: Int
-}

@@ -54,10 +54,6 @@ class DataServer {
                 put(putCmd)
             } else if let readCmd = cmd as? ReadCommmand {
                 read(readCmd)
-            } else if let fetchCmd = cmd as? FetchCommand {
-                fetch(fetchCmd)
-            } else if let locateCmd = cmd as? LocateCommand {
-                locate(locateCmd)
             }
         }
     }
@@ -83,8 +79,7 @@ class DataServer {
             fh.write(command.fileData[start..<start + end])
             start += chunkSize
             
-            do { try fh.close() }
-            catch { print(error) }
+            fh.unsafeClose()
         }
     }
     
@@ -106,16 +101,7 @@ class DataServer {
             readData!.append(fh.readData(ofLength: length))
             start += chunkSize
             
-            do { try fh.close() }
-            catch { print(error) }
+            fh.unsafeClose()
         }
-    }
-    
-    func fetch(_ command: FetchCommand) {
-        print("fetch cmd")
-    }
-    
-    func locate(_ command: LocateCommand) {
-        print("locate cmd")
     }
 }
