@@ -29,6 +29,7 @@
 
 /* Begin PBXFileReference section */
 		FA3EB78D25452B9500C8EB92 /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
+		FA863BD92550EF9C003D7F78 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FA897A222532924600C94608 /* swiftDFS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = swiftDFS; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA897A252532924600C94608 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		FA897A3125329B7A00C94608 /* DataServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataServer.swift; sourceTree = "<group>"; };
@@ -53,6 +54,7 @@
 			children = (
 				FA897A242532924600C94608 /* swiftDFS */,
 				FA897A232532924600C94608 /* Products */,
+				FA863BD92550EF9C003D7F78 /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
